@@ -1,0 +1,120 @@
+﻿<Window x:Class="labGraph.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:labGraph"
+        xmlns:dataGrid2D="http://gu.se/DataGrid2D"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        mc:Ignorable="d"
+        Title="Лабораторная теория графов" Height="620" Width="1100" WindowStartupLocation="CenterScreen" Background="DarkSlateGray" >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <ei:CallMethodAction MethodName="WindowClosing" TargetObject="{Binding}" />
+        </i:EventTrigger>
+
+
+    </i:Interaction.Triggers>
+
+
+    <Grid >
+        <Menu Height="20" VerticalAlignment="Top" Background="Gainsboro">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открыть" Command="{Binding NewFileCommand}"></MenuItem>
+
+                <MenuItem Header="Сохранить"  Command="{Binding SaveGraphCommand}"></MenuItem>
+
+                <MenuItem Header="Сохранить как">
+                    <MenuItem Header="Матрица смежности" Command="{Binding SaveAdjacencyCommand}"></MenuItem>
+                    <MenuItem Header="Матрица инцедентности" Command="{Binding SaveIncidenceCommand}"></MenuItem>
+                    <MenuItem Header="Список ребер" Command="{Binding SaveEdgeListCommand}"></MenuItem>
+                    <MenuItem Header="Список вершин" Command="{Binding SaveVertexListCommand}"></MenuItem>
+                    <MenuItem Header="Изображение" Command="{Binding SavePictureCommand}"></MenuItem>
+                </MenuItem>
+
+
+                <MenuItem Header="Выход" Command="{Binding ExitCommand}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Правка">
+                <MenuItem Header="Отменить" Command="{Binding UndoCommand}"></MenuItem>
+                <MenuItem Header="Вернуть" Command="{Binding RedoCommand}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Задачи теории графов"  >
+                <MenuItem Header="ЛР № 2. Поиска пути в ширину." Command="{Binding BFS2Command}"></MenuItem>
+                <MenuItem Header="ЛР № 3. Поиск по первому наилучшему совпадению." Command="{Binding BFS3Command}"></MenuItem>
+                <MenuItem Header="ЛР № 4. Алгоритм поиска Дейкстры." Command="{Binding DijkstraAlgorithmCommand}"></MenuItem>
+                <MenuItem Header="ЛР № 5. Алгоритм поиска A*." Command="{Binding AStarAlgorithmCommand}"></MenuItem>
+                <MenuItem Header="ЛР № 6. Вес, радиус диаметр и степени."  >
+                    <MenuItem Header="Найти вес всех вершин" Command="{Binding GetWeightsVertexCommand}"></MenuItem>
+                    <MenuItem Header="Вычислить радиус" Command="{Binding GetRadiusCommand}"></MenuItem>
+                    <MenuItem Header="Вычислить димаметр" Command="{Binding GetDiameterCommand}"></MenuItem>
+                    <MenuItem Header="Построить вектор степеней вершин графа" Command="{Binding GetListDegreeVertexCommand}"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="ЛР № 7. Изоморфизм графов." Command="{Binding IsomorphismCommand}"></MenuItem>
+                <MenuItem Header="ЛР № 9. Дополнение графа."  >
+                    <MenuItem Header="Определеить полноту" Command="{Binding IsFullGraphCommand}"></MenuItem>
+                    <MenuItem Header="Построить дополнение" Command="{Binding GetAdditionGraphCommand}"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="ЛР № 15. Раскраска графа." Command="{Binding FindChromaticNumber}"></MenuItem>
+                
+            </MenuItem>
+            <MenuItem Header="?">
+                <MenuItem Header="О программе" Command="{Binding AboutProgramCommand}"></MenuItem>
+                <MenuItem Header="Об авторе" Command="{Binding AboutAuthorCommand}"></MenuItem>
+            </MenuItem>
+
+        </Menu>
+
+        <Canvas HorizontalAlignment="Left" Height="504" Margin="10,75,0,0" VerticalAlignment="Top" Width="514" Background="Beige"/>
+
+        <Canvas Name="canvas" HorizontalAlignment="Left" Height="468" Margin="29,94,0,0" VerticalAlignment="Top" Width="477" Background="Beige">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <ei:CallMethodAction MethodName="MousePressDown" TargetObject="{Binding}" />
+                </i:EventTrigger>
+
+
+            </i:Interaction.Triggers>
+
+        </Canvas>
+        <StackPanel x:Name="stackPanel" Margin="10,30,498,519" Orientation="Horizontal">
+            <RadioButton GroupName="Languages"  Command="{Binding RadioCommand}" CommandParameter="IsCursor">
+                <Image  Source="Resources/cursor.png"/>
+            </RadioButton>
+            <RadioButton GroupName="Languages"  Command="{Binding RadioCommand}" CommandParameter="IsMove">
+                <Image  Source="Resources/move.png"/>
+            </RadioButton>
+            <RadioButton GroupName="Languages" Command="{Binding RadioCommand}" CommandParameter="IsVertex">
+                <Image  Source="Resources/vertex.png"/>
+            </RadioButton>
+            <RadioButton GroupName="Languages" Command="{Binding RadioCommand}" CommandParameter="IsEdge">
+                <Image  Source="Resources/edge.png"/>
+            </RadioButton>
+            <RadioButton GroupName="Languages" Command="{Binding RadioCommand}" CommandParameter="IsDelete">
+                <Image  Source="Resources/delete.png"/>
+            </RadioButton>
+            <RadioButton GroupName="Languages" Command="{Binding RadioCommand}" CommandParameter="IsDeleteAll">
+                <Image  Source="Resources/deleteAll.png"/>
+            </RadioButton>
+        </StackPanel>
+
+
+        <DataGrid  x:Name="grid1"
+          Margin="529,75,10,184"
+          AutoGenerateColumns="True"
+          ItemsSource="{Binding Path=Matrix}" CanUserSortColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="CellEditEnding">
+                    <ei:CallMethodAction MethodName="EditEnding" TargetObject="{Binding}" />
+                </i:EventTrigger>
+
+            </i:Interaction.Triggers>
+
+        </DataGrid>
+        <ListBox HorizontalAlignment="Left" Height="169" Margin="529,410,0,0" VerticalAlignment="Top" Width="553"  ItemsSource="{Binding History}"/>
+       
+     
+
+    </Grid>
+</Window>
